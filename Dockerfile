@@ -1,9 +1,9 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
 WORKDIR /app
 EXPOSE 33268
 EXPOSE 44398
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY *.csproj ./
 RUN dotnet restore
@@ -15,9 +15,9 @@ RUN dotnet publish -c Release -o out
 
 
 FROM build AS publish
-RUN dotnet publish "docker21sample.csproj" -c Release -o /app
+RUN dotnet publish "musicstore.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "docker21sample.dll"]
+ENTRYPOINT ["dotnet", "musicstore.dll"]
